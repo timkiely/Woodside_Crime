@@ -10,6 +10,10 @@ library(readr)
 crime_dat <- read_csv(crime_path)
 pop_dat <- read_csv(pop_path)
 
+dups <- names(pop_dat)[!duplicated(names(pop_dat))]
+
+pop_dat<-pop_dat[,dups]
+
 library(dplyr)
 pop_dat_lk <-
   pop_dat %>% 
@@ -20,14 +24,19 @@ pop_dat_lk <-
 # glimpse(crime_dat)
 # range(crime_dat$`Occurrence Date`,na.rm=T)
 
-# Harlem properties fall mostly in 30 and 33rd precinct
-# (exception of 174 W 137th St, which falls in 32nd precinct)
+# Sunnyside and Woodside fall mostly in 108 (LIC/Woodside) and 114th (Astoria/Sunnyside)
+# http://www.nyc.gov/html/nypd/html/precinct_maps/precinct_finder.shtml
+
+
+# Extract lat/lon from Location 1 variable
+crime_dat %<>%
+  
 
 
 library(dplyr)
-hardat <- 
+focus_data <- 
   crime_dat %>% 
-  filter(Precinct%in%c(30,33))
+  filter(Precinct%in%c(108,114))
 
 library(ggplot2)
 library(ggthemes)

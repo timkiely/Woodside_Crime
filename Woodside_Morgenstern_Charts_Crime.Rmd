@@ -1,0 +1,74 @@
+---
+output:
+  knitrBootstrap::bootstrap_document:
+    theme: readable
+    highlight: highlightjs
+    theme.chooser: TRUE
+    highlight.chooser: TRUE
+---
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE,fig.align='center',fig.width=18, fig.height=5}
+Subject<-"10031, Hamilton Heights"
+
+knitr::opts_chunk$set(bootstrap.show.code = F)
+library(gplots);textplot(Subject)
+
+
+wd<-"~/Dropbox (hodgeswardelliott)/Team_NYC/Tim_Kiely/Taxi/Harlem_portfolio"
+setwd(wd)
+load(file="master_plot_list.RData")
+
+knitr::opts_knit$set(root.dir = wd)
+knitr::opts_chunk$set(bootstrap.show.code = F)
+
+library(dplyr)
+library(lubridate)
+library(readr)
+library(TTR)
+library(ggplot2)  
+library(scales)
+library(zoo)
+library(grid)
+library(knitr)
+library(leaflet)
+library(choroplethrZip)
+library(gridExtra)
+library(plotly)
+library(GGally)
+
+knitr::opts_chunk$set(bootstrap.thumbnail=T
+               , bootstrap.thumbnail.size = ('col-lg-12') 
+               , bootstrap.show.code = F
+               , bootstrap.show.output = F
+               , bootstrap.show.message = F
+               , bootstrap.show.warning = F
+               , bootstrap.show.error = F
+               , fig.width = 10
+               , fig.height = 6
+               , fig.align = "center"
+               , bootstrap.panel = F
+               , bootstrap.class = 'row'
+               , dpi=100)
+
+
+# helper functions for themes, etc
+source("~/Dropbox (hodgeswardelliott)/Team_NYC/Tim_Kiely/HWE_Fuctions/HWE_functions.R")
+
+```
+
+
+
+
+```{r setup, include=FALSE}
+setwd("~/Dropbox (hodgeswardelliott)/Team_NYC/Tim_Kiely/Crime/Harlem_Portfolio")
+load(file="Master_Plot_List.RData")
+```
+
+
+```{r}
+
+lapply(master.plot.list,print)
+
+```
+

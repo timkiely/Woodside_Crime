@@ -1,4 +1,5 @@
 
+# EDA script for crime data in Sunnyside / Woodside
 
 
 crime_path <- "~/Dropbox (hodgeswardelliott)/Team_NYC/Tim_Kiely/Crime/NYPD_7_Major_Felony_Incidents.csv"
@@ -10,12 +11,12 @@ library(readr)
 crime_dat <- read_csv(crime_path)
 pop_dat <- read_csv(pop_path)
 
-
 dups <- names(pop_dat)[!duplicated(names(pop_dat))]
 
 pop_dat<-pop_dat[,dups]
 
 library(dplyr)
+library(magrittr)
 pop_dat_lk <-
   pop_dat %>% 
   group_by(precinct) %>% 
@@ -29,12 +30,18 @@ pop_dat_lk <-
 # http://www.nyc.gov/html/nypd/html/precinct_maps/precinct_finder.shtml
 
 
+
 # Extract lat/lon from Location 1 variable
-crime_dat %<>%
-  
+crime_dat %<>% 
+  mutate(lat = strsplit(`Location 1`,split=",")[[1]][1]
+            ,lat = gsub("[(]","",lat)
+            ,lat = gsub(" ","",lat)
+            ,lon = strsplit(`Location 1`,split=",")[[1]][2]
+            ,lon = gsub("[)]","",lon)
+            ,lon = gsub(" ","",lon)
+            )
 
 
-library(dplyr)
 focus_data <- 
   crime_dat %>% 
   filter(Precinct%in%c(108,114))
@@ -42,23 +49,18 @@ focus_data <-
 library(ggplot2)
 library(ggthemes)
 
-hardat %>% 
+focus_data %>% 
   mutate(`CompStat Year` = factor(`CompStat Year`)) %>% 
   group_by(Precinct,`CompStat Year`) %>% 
   summarise(count=n()) %>% 
   ggplot(aes(x=`CompStat Year`,y=count))+
   geom_bar(stat="identity")+
-  coord_cartesian(ylim=c(1500,2100))+
+  #coord_cartesian(ylim=c(1500,2100))+
   scale_y_continuous(labels=scales::comma)+
   theme_hwe()+
-  labs(title = "Crimes in Washington Heights"
-       ,subtitle="Crime has declined 23% since 2006 in the 30th and 33rd Precincts"
-       ,caption="Source: NYPD"
-       ,x=NULL
-       ,y="Count of Felonies")
-
-
-hardat %>% 
+  facet_wrap(~Precinct)
+  
+focus_data %>% 
   filter(`CompStat Year`%in%c(2006,2015)) %>% 
   mutate(`CompStat Year` = factor(`CompStat Year`)) %>% 
   group_by(`CompStat Year`) %>% 
@@ -68,12 +70,12 @@ hardat %>%
 
 
 
-hardat %>% 
+focus_data %>% 
   ggplot(aes(x=`CompStat Month`))+
   geom_bar(stat="count")+
   facet_wrap(~`CompStat Year`)
   
-hardat %>% 
+focus_data %>% 
   group_by(`CompStat Year`,`CompStat Month`) %>% 
   summarise(count=n()) %>%
   ungroup() %>% 
@@ -84,7 +86,7 @@ hardat %>%
 
 
 lvls <- 
-  hardat %>% 
+  focus_data %>% 
   group_by(`CompStat Year`,Offense) %>% 
   summarise(count=n()) %>% 
   filter(`CompStat Year`==2015) %>% 
@@ -93,28 +95,27 @@ lvls <-
   select(Offense)
 
 
-hardat %>% 
+focus_data %>% 
   mutate(`CompStat Year` = factor(`CompStat Year`)
          ,Offense = factor(Offense, levels = as.character(lvls$Offense))) %>% 
-  group_by(`CompStat Year`,`Offense Classification`,Offense) %>% 
+  group_by(Precinct,`CompStat Year`,`Offense Classification`,Offense) %>% 
   summarise(count=n()) %>% 
   ggplot(aes(x=`CompStat Year`,y=count,group=`Offense`,color=`Offense`))+
   geom_line(size=2)+
+  facet_wrap(~Precinct)+
   scale_color_tableau()+
   theme_hwe()+
-  labs(title = "Major Crimes in Washington Heights"
+  labs(title = "Major Crimes in Sunnyside/Woodside"
        ,caption = "Source: NYPD"
        ,x = NULL
        ,y = NULL)
 
 
-crime_dat %>% 
-  group_by(`CompStat Year`)
-  ggplot(aes(x=`CompStat Year`))
 
-all_harlem<-
+
   crime_dat %>% 
-  mutate(color = ifelse(Precinct%in%c(30,33),1,0)) %>% 
+  mutate(color = ifelse(Precinct%in%c(108,114),"Sunnydise/Woodside","Other")
+         ) %>% 
   group_by(`CompStat Year`,Borough,color) %>% 
   arrange(color) %>% 
   filter(!is.na(Borough)

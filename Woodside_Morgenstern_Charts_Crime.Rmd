@@ -10,13 +10,13 @@ output:
 
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE,fig.align='center',fig.width=18, fig.height=5}
-Subject<-"10031, Hamilton Heights"
+Subject<-"Sunnyside + Woodside"
 
 knitr::opts_chunk$set(bootstrap.show.code = F)
 library(gplots);textplot(Subject)
 
 
-wd<-"~/Dropbox (hodgeswardelliott)/Team_NYC/Tim_Kiely/Taxi/Harlem_portfolio"
+wd<-"~/Dropbox (hodgeswardelliott)/Team_NYC/Tim_Kiely/Crime/Woodside_Morgenstern/Woodside_Morgenstern"
 setwd(wd)
 load(file="master_plot_list.RData")
 
@@ -59,17 +59,9 @@ source("~/Dropbox (hodgeswardelliott)/Team_NYC/Tim_Kiely/HWE_Fuctions/HWE_functi
 ```
 
 
-
-
-```{r setup, include=FALSE}
-setwd("~/Dropbox (hodgeswardelliott)/Team_NYC/Tim_Kiely/Crime/Harlem_Portfolio")
-load(file="Master_Plot_List.RData")
-```
-
-
 ```{r}
 
-lapply(master.plot.list,print)
+master.plot.list
 
 ```
 

@@ -10,6 +10,7 @@ library(readr)
 crime_dat <- read_csv(crime_path)
 pop_dat <- read_csv(pop_path)
 
+
 dups <- names(pop_dat)[!duplicated(names(pop_dat))]
 
 pop_dat<-pop_dat[,dups]

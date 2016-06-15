@@ -1,6 +1,7 @@
 
 # GENERATING CHARTS FOR CRIME STATISTICS FOR THE HARLEM PORTFOLIO
 
+
 master.plot.list<-list()
 
 crime_path <- "~/Dropbox (hodgeswardelliott)/Team_NYC/Tim_Kiely/Crime/NYPD_7_Major_Felony_Incidents.csv"

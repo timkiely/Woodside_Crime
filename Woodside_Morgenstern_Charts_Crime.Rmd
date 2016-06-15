@@ -8,6 +8,7 @@ output:
 ---
 
 
+
 ```{r, echo=FALSE, message=FALSE, warning=FALSE,fig.align='center',fig.width=18, fig.height=5}
 Subject<-"10031, Hamilton Heights"
 
